@@ -1,9 +1,8 @@
-import csv
-import os
-
 from django.http import HttpResponse
 from django.shortcuts import render
 from .forms import ContactForm
+from .utils import save_contact_to_file
+
 
 def home(request):
     """Обработка домашней страницы."""
@@ -19,16 +18,8 @@ def contacts(request):
             phone = form.cleaned_data['phone']
             message = form.cleaned_data['message']
 
-        # Определяем путь к файлу
-        file_path = os.path.join("data", "contacts.csv")
-
-        # Создаём папку data, если её нет
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
-
-        # Записываем данные в CSV
-        with open(file_path, "a", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f, delimiter=";")
-            writer.writerow([name, phone, message])
+        # Вызов функции сохранения
+        save_contact_to_file(name, phone, message)
 
         return HttpResponse(f"Спасибо, {name}! Ваше сообщение сохранено.")
     else:
