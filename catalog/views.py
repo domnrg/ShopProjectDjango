@@ -6,17 +6,18 @@ from .utils import save_contact_to_file
 
 def home(request):
     """Обработка домашней страницы."""
-    return render(request, 'home.html')
+    return render(request, "home.html")
+
 
 def contacts(request):
     """Обработка формы обратной связи."""
-    if request.method == 'POST':
+    if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
-        # Получение данных из формы
-            name = form.cleaned_data['name']
-            phone = form.cleaned_data['phone']
-            message = form.cleaned_data['message']
+            # Получение данных из формы
+            name = form.cleaned_data["name"]
+            phone = form.cleaned_data["phone"]
+            message = form.cleaned_data["message"]
 
         # Вызов функции сохранения
         save_contact_to_file(name, phone, message)
@@ -25,4 +26,4 @@ def contacts(request):
     else:
         form = ContactForm()
 
-    return render(request, 'contacts.html', {"form": form})
+    return render(request, "contacts.html", {"form": form})
