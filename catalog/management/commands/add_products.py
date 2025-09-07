@@ -6,6 +6,11 @@ class Command(BaseCommand):
     help = 'Add products to the database'
 
     def handle(self, *args, **options):
+        # Удаляем старые данные
+        Product.objects.all().delete()
+        Category.objects.all().delete()
+
+        # Создаём категории
         category, created = Category.objects.get_or_create(
             name="Телевизоры",
             defaults={"description": "Современные телевизоры"},
@@ -15,6 +20,7 @@ class Command(BaseCommand):
         else:
             self.stdout.write(self.style.WARNING(f"Категория '{category.name}' уже существует"))
 
+        # Добавляем продукты
         products = [
             {"name": "Samsung QLED 55", "price": 70000, "description": "55 дюймов, 4K QLED"},
             {"name": "LG OLED 65", "price": 120000, "description": "65 дюймов, OLED, 4K HDR"},
