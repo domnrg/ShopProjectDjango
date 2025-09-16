@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .forms import ContactForm
 from .models import Product
 from .utils import save_contact_to_file
@@ -30,9 +30,15 @@ def contacts(request):
     return render(request, "contacts.html", {"form": form})
 
 
+def products_list(request):
+    """"""
+    products = Product.objects.all()
+    context = {"products": products}
+    return render(request, "products_list.html", context)
+
+
 def product_detail(request, pk):
     """Обработка страницы с подробной информацией о товаре"""
-    product = Product.object.get(pk=pk)
+    product = get_object_or_404(Product, pk=pk)
     context = {"product": product}
     return render(request, "product_detail.html", context)
-
