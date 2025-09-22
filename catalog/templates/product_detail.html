@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+ <div class="container">
+    <div class="row text-center align-items-stretch">
+        <div class="col-3">
+            <div class="card mb-4 box-shadow flex-fill">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{ product.name }}</h4>
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <div class="image-container mb-3">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img">
+                        {% else %}
+                        <img src="/static/no-image.png" alt="Нет фото" class="card-img">
+                        {% endif %}
+                    </div>
+                    <h1 class="card-title pricing-card-title">$ {{ product.price }}</h1>
+                    <ul class="list-unstyled mt-3 mb-4 text-start m-3 flex-grow-1">
+                        <li>- {{ product.description }}</li>
+                    </ul>
+                    <a href="#" class="btn btn-lg btn-block btn-outline-primary mt-auto">
+                        Купить
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
