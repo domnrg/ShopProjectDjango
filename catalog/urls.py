@@ -3,14 +3,15 @@ from django.conf.urls.static import static
 from django.urls import path
 from catalog.apps import CatalogConfig
 from . import views
+from .views import ProductsListView, ProductDetailView, ContactFormView, HomeView
 
 app_name = CatalogConfig.name
 
 urlpatterns = [
-    path("", views.home, name="home"),
-    path("contacts/", views.contacts, name="contacts"),
-    path("products/", views.products_list, name="products_list"),
-    path("products/<int:pk>/", views.product_detail, name="product_detail"),
+    path("", HomeView.as_view(), name="home"),
+    path("contacts/", ContactFormView.as_view(), name="contacts"),
+    path("products/", ProductsListView.as_view(), name="product_list"),
+    path("products/<int:pk>/", ProductDetailView.as_view(), name="product_detail"),
 ]
 
 if settings.DEBUG:
