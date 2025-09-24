@@ -1,3 +1,5 @@
+{% extends "catalog/base.html" %}
+{% block content %}
 {% load static %}
 <!doctype html>
 <html lang="ru">
@@ -19,8 +21,7 @@
         <a href="{% url 'blog:post_list' %}" class="btn btn-danger mt-3">Отмена</a>
     </form>
 
-    {% include 'catalog/includes/inc_footer.html' %}
-
-<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+ <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>
+{% endblock %}
