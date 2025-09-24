@@ -16,6 +16,12 @@ class PostDetailView(DetailView):
     model = Post
     template_name = "blog/post_detail.html"
 
+    def get_object(self, queryset=None):
+        object = super().get_object(queryset)
+        object.counter += 1
+        object.save(update_fields=["counter"])
+        return object
+
 class PostDeleteView(DeleteView):
     model = Post
     template_name = "blog/post_confirm_delete.html"
