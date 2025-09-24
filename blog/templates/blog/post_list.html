@@ -6,12 +6,12 @@
     <ul class="list-group">
         {% for post in post_list %}
             <li class="list-group-item">
-                <a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a>
+               <a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a>
                 <small class="text-muted ms-2">{{ post.created_at }}</small>
             </li>
         {% empty %}
             <li class="list-group-item">Постов пока нет.</li>
-        {% endfor %}
+       {% endfor %}
     </ul>
     <a href="{% url 'blog:post_create' %}" class="btn btn-success mt-3">Создать пост</a>
     </div>

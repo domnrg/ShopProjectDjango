@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from .models import Post
 
 class PostCreateView(CreateView):
@@ -12,6 +12,9 @@ class PostListView(ListView):
     model = Post
     template_name = "blog/post_list.html"
 
+    def get_queryset(self):
+        return Post.objects.filter(is_published=True)
+
 class PostDetailView(DetailView):
     model = Post
     template_name = "blog/post_detail.html"
@@ -21,6 +24,12 @@ class PostDetailView(DetailView):
         object.counter += 1
         object.save(update_fields=["counter"])
         return object
+
+class PostUpdateView(UpdateView):
+    model = Post
+    fields = ['title', 'content']
+    template_name = "blog/post_form.html"
+    success_url = reverse_lazy('blog:post_list')
 
 class PostDeleteView(DeleteView):
     model = Post
