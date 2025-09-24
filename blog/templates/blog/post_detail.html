@@ -6,11 +6,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Создание поста{% endblock %}</title>
+    <title>{% block title %}Детали поста{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body class="container mt-5">
+    {% if post.image %}
+        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="img-fluid" style="max-width:400px; height:auto;">
+        {% else %}
+        <img src="{% static 'no-image.png' %}" alt="Нет фото" class="card-img">
+    {% endif %}
     <h1 class="mb-4">{{ post.title }}</h1>
     <p>{{ post.content }}</p>
     <p>Создано: {{ post.created_at }}</p>
