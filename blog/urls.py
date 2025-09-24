@@ -2,14 +2,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 
-from blog.views import PostListView, PostDetailView
-from catalog.apps import CatalogConfig
+from blog.views import PostListView, PostDetailView, PostCreateView, PostDeleteView
 
-app_name = CatalogConfig.name
+app_name = "blog"
 
 urlpatterns = [
     path("", PostListView.as_view(), name="post_list"),
-    path("<int:pk>/", PostDetailView.as_view(), name="post_detail"),
+    path("post/<int:pk>/", PostDetailView.as_view(), name="post_detail"),
+    path("post/create/", PostCreateView.as_view(), name="post_create"),
+    path("post/<int:pk>/delete", PostDeleteView.as_view(), name="post_delete"),
 ]
 
 
