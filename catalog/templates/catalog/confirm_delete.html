@@ -1,0 +1,24 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %} Удалить продукт{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="container mt-5">
+    <form method="post" class="card p-4 shadow-sm">
+    {% csrf_token %}
+    <p>Вы уверены, что хотите удалить "{{ product.name }}"?</p>
+    <button type="submit" class="btn btn-danger mt-3">Удалить</button>
+    <a href="{% url 'blog:post_list' %}" class="btn btn-secondary mt-3">Отмена</a>
+    </form>
+
+   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>
+{% endblock %}
