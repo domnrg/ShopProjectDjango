@@ -1,8 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'catalog/base.html' %}
 {% block content %}
-<div class="container">
+ <div class="container">
     <div class="row text-center align-items-stretch">
-        {% for product in products %}
         <div class="col-3">
             <div class="card mb-4 box-shadow flex-fill">
                 <div class="card-header">
@@ -16,19 +15,16 @@
                         <img src="/static/no-image.png" alt="Нет фото" class="card-img">
                         {% endif %}
                     </div>
-                    <h1 class="card-title pricing-card-title">$ {{ product.price }}</h1>
-                    <ul class="list-unstyled mt-3 mb-4 text-start m-3 card-description flex-grow-1">
-                        <li>- {{ product.description|truncatechars:100 }}</li>
+                    <h1 class="card-title pricing-card-title">$ {{ object.price }}</h1>
+                    <ul class="list-unstyled mt-3 mb-4 text-start m-3 flex-grow-1">
+                        <li>- {{ object.description }}</li>
                     </ul>
-                    <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-lg btn-block btn-outline-primary mt-auto">
-                        Подробнее
+                    <a href="#" class="btn btn-lg btn-block btn-outline-primary mt-auto">
+                        Купить
                     </a>
                 </div>
             </div>
         </div>
-        {% empty %}
-        <p>Нет доступных товаров.</p>
-        {% endfor %}
     </div>
 </div>
 {% endblock %}

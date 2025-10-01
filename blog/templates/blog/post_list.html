@@ -1,0 +1,31 @@
+{% extends "catalog/base.html" %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Блог</h1>
+     <ul class="list-group">
+        {% for post in post_list %}
+            {% if post.is_published %}
+            <li class="list-group-item">
+                <h5>
+                    <a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a>
+                </h5>
+
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="{{ post.title }}"
+                         class="img-fluid mb-2" style="max-width:300px; height:auto;">
+                {% else %}
+                    <img src="{% static 'no-image.png' %}" alt="Нет фото"
+                         class="img-fluid mb-2" style="max-width:300px; height:auto;">
+                {% endif %}
+                </li>
+                <small class="text-muted">{{ post.created_at }}</small>
+            {% endif %}
+        {% empty %}
+            <li class="list-group-item">Постов пока нет.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'blog:post_create' %}" class="btn btn-success mt-3">Создать пост</a>
+    </div>
+{% endblock %}
