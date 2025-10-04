@@ -19,9 +19,9 @@
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3 flex-grow-1">
                         <li>- {{ object.description }}</li>
                     </ul>
-                    <a href="#" class="btn btn-lg btn-block btn-outline-primary mt-auto">
-                        Купить
-                    </a>
+                    <a href="#" class="btn btn-lg btn-block btn-outline-primary mt-auto">Купить</a>
+                    <a href="{% url 'catalog:product_update' object.pk %}" class="btn btn-secondary mt-3">Редактировать</a>
+                    <a href="{% url 'catalog:product_delete' object.pk %}" class="btn btn-danger mt-3">Удалить</a>
                 </div>
             </div>
         </div>

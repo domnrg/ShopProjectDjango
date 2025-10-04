@@ -1,8 +1,9 @@
 from django.http import HttpResponse
-from django.views.generic import ListView, DetailView, TemplateView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormView
 
-from .forms import ContactForm
+from .forms import ContactForm, ProductForm
 from .models import Product
 from .utils import save_contact_to_file
 
@@ -27,9 +28,27 @@ class ContactFormView(FormView):
         return HttpResponse(f"Спасибо, {name}! Ваше сообщение сохранено.")
 
 
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = "catalog/product_form.html"
+    success_url = reverse_lazy('catalog:product_list')
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = "catalog/product_form.html"
+    success_url = reverse_lazy('catalog:product_list')
+
+
 class ProductsListView(ListView):
     model = Product
 
 
 class ProductDetailView(DetailView):
     model = Product
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    template_name = "catalog/confirm_delete.html"
+    success_url = reverse_lazy('catalog:product_list')
