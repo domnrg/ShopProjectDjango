@@ -20,8 +20,10 @@
                         <li>- {{ object.description }}</li>
                     </ul>
                     <a href="#" class="btn btn-lg btn-block btn-outline-primary mt-auto">Купить</a>
+                        {% if perms.catalog.can_unpublish_product %}
                     <a href="{% url 'catalog:product_update' object.pk %}" class="btn btn-secondary mt-3">Редактировать</a>
                     <a href="{% url 'catalog:product_delete' object.pk %}" class="btn btn-danger mt-3">Удалить</a>
+                        {% endif %}
                 </div>
             </div>
         </div>
