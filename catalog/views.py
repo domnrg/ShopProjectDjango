@@ -1,7 +1,9 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormView
 
@@ -55,6 +57,13 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
             return ProductModeratorForm
         raise PermissionDenied
 
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if obj.owner != request.user:
+            raise PermissionDenied("Вы не можете редактировать этот продукт.")
+        return super().dispatch(request, *args, **kwargs)
+
+
 class ProductsListView(ListView):
     model = Product
 
@@ -66,4 +75,22 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = "catalog/confirm_delete.html"
     success_url = reverse_lazy('catalog:product_list')
+
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if obj.owner != request.user and not request.user.has_perm('catalog.can_delete_product'):
+            raise PermissionDenied("Вы не можете удалить этот продукт.")
+        return super().dispatch(request, *args, **kwargs)
+
+
+class ProductUnpublishView(PermissionRequiredMixin, View):
+    permission_required = "catalog.can_unpublish_product"
+
+    def get(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        product.is_published = False
+        product.save()
+        return redirect('catalog:product_list')
+
+
 
