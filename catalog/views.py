@@ -66,6 +66,16 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
 
 class ProductsListView(ListView):
     model = Product
+    template_name = "catalog/product_list.html"
+    context_object_name = "object_list"
+
+    def get_queryset(self):
+        return Product.objects.filter(is_published=True).select_related('category')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
 
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
@@ -95,16 +105,19 @@ class ProductUnpublishView(PermissionRequiredMixin, View):
 
 class ProductsByCategoryView(ListView):
     model = Product
-    template_name = "catalog/products_by_category.html"
-    context_object_name = "products"
+    template_name = "catalog/product_list.html"
+    context_object_name = "object_list"
 
     def get_queryset(self):
-        self.category = get_object_or_404(Category, id=self.kwargs['category_id'])
-        return Product.objects.filter(category=self.category, is_published=True)
+        category_id = self.kwargs.get('category_id')
+        self.category = get_object_or_404(Category, id=category_id)
+        return Product.objects.filter(category=self.category, is_published=True).select_related('category')
 
-    def get_context_data(self, **kwargs):
+
+def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category'] = self.category
+        context['categories'] = Category.objects.all()
         return context
 
 
