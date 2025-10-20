@@ -8,7 +8,7 @@ from django.views.generic import ListView, DetailView, TemplateView, CreateView,
 from django.views.generic.edit import FormView
 
 from .forms import ContactForm, ProductForm, ProductModeratorForm
-from .models import Product
+from .models import Product, Category
 from .utils import save_contact_to_file
 
 
@@ -91,6 +91,22 @@ class ProductUnpublishView(PermissionRequiredMixin, View):
         product.is_published = False
         product.save()
         return redirect('catalog:product_list')
+
+
+class ProductsByCategoryView(ListView):
+    model = Product
+    template_name = "catalog/products_by_category.html"
+    context_object_name = "products"
+
+    def get_queryset(self):
+        self.category = get_object_or_404(Category, id=self.kwargs['category_id'])
+        return Product.objects.filter(category=self.category, is_published=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = self.category
+        return context
+
 
 
 
