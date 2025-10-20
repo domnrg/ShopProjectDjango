@@ -57,6 +57,12 @@ class ProductForm(forms.ModelForm):
         return cleaned_data
 
 
+class ProductModeratorForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['is_published']
+        labels = {'is_published': 'Опубликовано'}
+
 
 class ContactForm(forms.Form):
     name = forms.CharField(

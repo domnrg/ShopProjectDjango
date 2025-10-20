@@ -1,6 +1,6 @@
 {% extends 'catalog/base.html' %}
 {% block content %}
- <div class="container">
+<div class="container">
     <div class="row text-center align-items-stretch">
         <div class="col-3">
             <div class="card mb-4 box-shadow flex-fill">
@@ -20,9 +20,18 @@
                         <li>- {{ object.description }}</li>
                     </ul>
                     <a href="#" class="btn btn-lg btn-block btn-outline-primary mt-auto">Купить</a>
-                    <a href="{% url 'catalog:product_update' object.pk %}" class="btn btn-secondary mt-3">Редактировать</a>
-                    <a href="{% url 'catalog:product_delete' object.pk %}" class="btn btn-danger mt-3">Удалить</a>
-                </div>
+                    {% if request.user == product.owner %}
+                    <!-- Владелец -->
+                    <a href="{% url 'catalog:product_update' product.pk %}"
+                       class="btn btn-secondary mt-3">Редактировать</a>
+                    <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger mt-3">Удалить</a>
+
+                    {% elif perms.catalog.can_delete_product and perms.catalog.can_unpublish_product %}
+                    <!-- Модератор -->
+                    <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger mt-3">Удалить</a>
+                    <a href="{% url 'catalog:product_unpublish' product.pk %}" class="btn btn-warning mt-3">Отменить публикацию</a>
+                    {% endif %}
+               </div>
             </div>
         </div>
     </div>
