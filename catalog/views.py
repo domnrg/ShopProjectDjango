@@ -9,6 +9,7 @@ from django.views.generic.edit import FormView
 
 from .forms import ContactForm, ProductForm, ProductModeratorForm
 from .models import Product, Category
+from .services import get_products_from_cache
 from .utils import save_contact_to_file
 
 
@@ -70,7 +71,7 @@ class ProductsListView(ListView):
     context_object_name = "object_list"
 
     def get_queryset(self):
-        return Product.objects.filter(is_published=True).select_related('category')
+        return get_products_from_cache()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
