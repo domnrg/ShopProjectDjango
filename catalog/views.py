@@ -8,7 +8,8 @@ from django.views.generic import ListView, DetailView, TemplateView, CreateView,
 from django.views.generic.edit import FormView
 
 from .forms import ContactForm, ProductForm, ProductModeratorForm
-from .models import Product
+from .models import Product, Category
+from .services import get_products_from_cache
 from .utils import save_contact_to_file
 
 
@@ -66,6 +67,16 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
 
 class ProductsListView(ListView):
     model = Product
+    template_name = "catalog/product_list.html"
+    context_object_name = "object_list"
+
+    def get_queryset(self):
+        return get_products_from_cache()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
 
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
@@ -91,6 +102,25 @@ class ProductUnpublishView(PermissionRequiredMixin, View):
         product.is_published = False
         product.save()
         return redirect('catalog:product_list')
+
+
+class ProductsByCategoryView(ListView):
+    model = Product
+    template_name = "catalog/product_list.html"
+    context_object_name = "object_list"
+
+    def get_queryset(self):
+        category_id = self.kwargs.get('category_id')
+        self.category = get_object_or_404(Category, id=category_id)
+        return Product.objects.filter(category=self.category, is_published=True).select_related('category')
+
+
+def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = self.category
+        context['categories'] = Category.objects.all()
+        return context
+
 
 
 
